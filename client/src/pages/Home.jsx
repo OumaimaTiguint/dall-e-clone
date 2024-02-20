@@ -1,15 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Card, FormField, Loader } from '../components';
 
-const RenderCards = ({data, title}) => {
-    if(data?.length > 0) { 
-        return data.map((img) => ( <Card key={img._id} {...img} />))
+const RenderCards = React.memo(({ data, title }) => {
+    if (!data || data.length === 0) {
+        return <h2 className="mt-5 font-bold text-[#6449ff] text-xl uppercase">{title}</h2>;
     }
 
-    return (
-        <h2 className="mt-5 font-bold text-[#6449ff] text-xl uppercase">{title}</h2>
-    )
-}
+    return data.map((img) => <Card key={img._id} {...img} />);
+});
 
 const Home = () => {
     const [loading, setLoading] = useState(false);
@@ -46,7 +44,8 @@ const Home = () => {
 
     const handleSearchChange = (e) => {
         clearTimeout(searchTimeOut);
-        setSearchText(e.target.value);
+        const text = e.target.value;
+        setSearchText(text);
 
         setSearchTimeOut(
             setTimeout(()=> {
@@ -57,6 +56,10 @@ const Home = () => {
             }, 500)
         )
     }
+
+    const renderData = useMemo(() => {
+        return searchText ? searchedResults : allPosts;
+    }, [searchText, searchedResults, allPosts]);
 
     return (
         <section className="max-w-7xl mx-auto">
@@ -90,15 +93,7 @@ const Home = () => {
                         )}
 
                         <div className="grid lg:grid-cols-4 sm:grid-cols-3 xs:grid-cols-2 grid-cols-1 gap-3">
-                            {searchText ? (
-                                <RenderCards 
-                                    data={searchedResults}
-                                    title="No results found" />
-                            ) : (
-                                <RenderCards 
-                                    data={allPosts}
-                                    title="No results found"/>
-                            )}
+                            <RenderCards data={renderData} title="No results found" />
                         </div>
                     </>
                 )}
