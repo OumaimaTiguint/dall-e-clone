@@ -1,22 +1,12 @@
 import React, { useMemo } from 'react';
 import { download } from '../assets';
-import { downloadImage } from '../utils';
+import { downloadImage, checkWebPSupport } from '../utils';
 
 const Card = ({_id, name, prompt, photo}) => {
-    // Check if browser supports WebP format
     const supportsWebP = useMemo(() => {
-        const elem = document.createElement('canvas');
-
-        if (!!(elem.getContext && elem.getContext('2d'))) {
-            // was able or not to get WebP representation
-            return elem.toDataURL('image/webp').indexOf('data:image/webp') === 0;
-        }
-
-        // Browser doesn't support canvas, assume WebP is not supported
-        return false;
+        return checkWebPSupport();
     }, []);
 
-    // Construct URL for the image based on browser support
     const imageUrl = useMemo(() => {
         if (supportsWebP) {
             // Use WebP image URL if supported
