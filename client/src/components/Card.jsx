@@ -1,12 +1,36 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { download } from '../assets';
 import { downloadImage } from '../utils';
 
 const Card = ({_id, name, prompt, photo}) => {
+    // Check if browser supports WebP format
+    const supportsWebP = useMemo(() => {
+        const elem = document.createElement('canvas');
+
+        if (!!(elem.getContext && elem.getContext('2d'))) {
+            // was able or not to get WebP representation
+            return elem.toDataURL('image/webp').indexOf('data:image/webp') === 0;
+        }
+
+        // Browser doesn't support canvas, assume WebP is not supported
+        return false;
+    }, []);
+
+    // Construct URL for the image based on browser support
+    const imageUrl = useMemo(() => {
+        if (supportsWebP) {
+            // Use WebP image URL if supported
+            return photo.replace(/\.png$/, '.webp');
+        } else {
+            // Otherwise, use PNG image URL
+            return photo;
+        }
+    }, [supportsWebP, photo]);
+
     return (
         <div className="rounded-xl group relative shadow-card hover:shadow-cardhover card">
             <img className="w-full h-auto object-cover rounded-xl" 
-                 src={photo} 
+                 src={imageUrl} 
                  alt={prompt} />
             <div className="group-hover:flex flex-col max-h-[94%] hidden absolute bottom-0 left-0 rright-0 bg-[#10131f] m-2 p-4 rounded-md">
                 <p className="text-white text-md overflow-y-auto prompt">
