@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { preview } from '../assets';
 import { getRandomPrompt } from '../utils';
@@ -76,6 +76,11 @@ const CreatePost = () => {
         }
     }
 
+    useEffect(() => {
+        const img = new Image();
+        img.src = preview;
+    }, []);
+
     return (
         <section className="max-w-7xl mx-auto">
             <div>
@@ -107,11 +112,15 @@ const CreatePost = () => {
                         {form.photo ? (
                             <img src={form.photo}
                                  alt={form.prompt}
-                                 className="w-full h-full object-contain" />
+                                 className="w-full h-full object-contain"
+                                 width="100%"
+                                 height="100%" />
                         ) : (
                             <img src={preview}
                                  alt="preview"
-                                 className="w-9/12 h-9/12 opacity-40 object-contain" />
+                                 className="w-9/12 h-9/12 opacity-40 object-contain"
+                                 width="100%"
+                                 height="100%" />
                         )}
 
                         {generatingImg && (
