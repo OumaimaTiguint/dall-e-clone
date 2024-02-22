@@ -21,3 +21,26 @@
 	background-color: #666e75;
 	border-radius: 5px;
 }
+
+.element-to-fade-to-top {
+    opacity: 0;
+}
+
+@keyframes fadeInTop {
+    from {
+      opacity: 0;
+      transform: translateY(100px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0px);
+    }
+}
+  
+.fade-in-top {
+    opacity: 0;
+    transform: translateY(0px);
+    animation-name: fadeInTop;
+    animation-duration: 1.7s;
+    animation-fill-mode: both;
+}

@@ -18,7 +18,7 @@ const Card = ({_id, name, prompt, photo}) => {
     }, [supportsWebP, photo]);
 
     return (
-        <div className="rounded-xl group relative shadow-card hover:shadow-cardhover card">
+        <div className="rounded-xl group relative shadow-card hover:shadow-cardhover card element-to-fade-to-top fade-in-top">
             <img className="w-full h-auto object-cover rounded-xl" 
                  src={imageUrl} 
                  alt={prompt} />
